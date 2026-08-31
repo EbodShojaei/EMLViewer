@@ -1,0 +1,78 @@
+From: Attacker <mallory@evil.example>
+To: todd@corp.example
+Subject: Hostile attachment filenames
+Date: Tue, 11 Aug 2026 12:00:00 +0000
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="evil-b"
+
+--evil-b
+Content-Type: text/plain; charset=utf-8
+
+Every attachment below has a hostile filename. None may escape the chosen folder,
+and none may display a misleading extension.
+
+--evil-b
+Content-Type: application/octet-stream
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="../../../../.zshrc"
+
+iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAIAAACRXR/mAAAAP0lEQVR42u3PMQ0AAAgDsOHf9Cwh
+HCQt0LWTZBcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPAxAaJPAAGX8h3AAAAAAElF
+TkSuQmCC
+--evil-b
+Content-Type: application/octet-stream
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="..\\..\\windows\\win.ini"
+
+iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAIAAACRXR/mAAAAP0lEQVR42u3PMQ0AAAgDsOHf9Cwh
+HCQt0LWTZBcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPAxAaJPAAGX8h3AAAAAAElF
+TkSuQmCC
+--evil-b
+Content-Type: text/plain
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="CON.txt"
+
+iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAIAAACRXR/mAAAAP0lEQVR42u3PMQ0AAAgDsOHf9Cwh
+HCQt0LWTZBcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPAxAaJPAAGX8h3AAAAAAElF
+TkSuQmCC
+--evil-b
+Content-Type: application/octet-stream
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename=".."
+
+iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAIAAACRXR/mAAAAP0lEQVR42u3PMQ0AAAgDsOHf9Cwh
+HCQt0LWTZBcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPAxAaJPAAGX8h3AAAAAAElF
+TkSuQmCC
+--evil-b
+Content-Type: application/octet-stream
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="photo‮gnp.exe"
+
+iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAIAAACRXR/mAAAAP0lEQVR42u3PMQ0AAAgDsOHf9Cwh
+HCQt0LWTZBcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPAxAaJPAAGX8h3AAAAAAElF
+TkSuQmCC
+--evil-b
+Content-Type: application/octet-stream
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA.pdf"
+
+iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAIAAACRXR/mAAAAP0lEQVR42u3PMQ0AAAgDsOHf9Cwh
+HCQt0LWTZBcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPAxAaJPAAGX8h3AAAAAAElF
+TkSuQmCC
+--evil-b
+Content-Type: application/pdf
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="report.pdf"
+
+iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAIAAACRXR/mAAAAP0lEQVR42u3PMQ0AAAgDsOHf9Cwh
+HCQt0LWTZBcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPAxAaJPAAGX8h3AAAAAAElF
+TkSuQmCC
+--evil-b
+Content-Type: application/pdf
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="report.pdf"
+
+iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAIAAACRXR/mAAAAP0lEQVR42u3PMQ0AAAgDsOHf9Cwh
+HCQt0LWTZBcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPAxAaJPAAGX8h3AAAAAAElF
+TkSuQmCC
+--evil-b--

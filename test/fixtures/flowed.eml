@@ -1,0 +1,18 @@
+From: Linus <dev@kernel.example>
+To: list@kernel.example
+Subject: Re: patch series
+Date: Sun, 09 Aug 2026 22:14:00 +0000
+Content-Type: text/plain; charset=utf-8; format=flowed
+
+This is a long paragraph that the sending client soft-wrapped at roughly 
+seventy-two columns, so each continuation line ends with a single space 
+and should be rejoined into one flowing paragraph on display.
+
+This second paragraph is also soft wrapped across a couple of lines to 
+make sure the unfolding does not run past a blank line boundary here.
+
+  fixed_width_code_block();
+  should_not_reflow();
+
+-- 
+Sent from a client that sets format=flowed

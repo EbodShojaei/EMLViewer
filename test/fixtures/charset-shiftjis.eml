@@ -1,0 +1,10 @@
+From: =?ISO-2022-JP?B?GyRCRURDZhsoQg==?= <tanaka@example.jp>
+To: todd@corp.example
+Subject: =?Shift_JIS?B?g2WDWINng4GBW4OL?=
+Date: Fri, 07 Aug 2026 18:20:00 +0900
+MIME-Version: 1.0
+Content-Type: text/plain; charset=Shift_JIS
+Content-Transfer-Encoding: 8bit
+
+こんにちは、テストメールです。
+文字化けしていませんか？

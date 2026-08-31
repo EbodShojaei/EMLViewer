@@ -1,0 +1,26 @@
+From: Build Bot <ci@corp.example>
+To: dev@corp.example
+Subject: Build #4417 failed
+Date: Tue, 11 Aug 2026 03:02:11 +0000
+MIME-Version: 1.0
+Content-Type: multipart/alternative; boundary="alt-bound"
+
+--alt-bound
+Content-Type: text/plain; charset=utf-8
+
+Build #4417 FAILED on main.
+
+  FAIL  src/parser.test.ts
+    expected 4 columns, received 3
+
+See https://ci.corp.example/builds/4417
+--alt-bound
+Content-Type: text/html; charset=utf-8
+
+<html><body style="font-family:sans-serif">
+<h2 style="color:#c00">Build #4417 failed</h2>
+<pre style="background:#f5f5f5;padding:10px">FAIL  src/parser.test.ts
+  expected 4 columns, received 3</pre>
+<p><a href="https://ci.corp.example/builds/4417">View build</a></p>
+</body></html>
+--alt-bound--

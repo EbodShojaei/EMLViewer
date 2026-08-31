@@ -1,0 +1,24 @@
+From: Acme <hello@acme.example>
+To: todd@corp.example
+Subject: Inline logo test
+Date: Tue, 11 Aug 2026 10:00:00 +0000
+MIME-Version: 1.0
+Content-Type: multipart/related; boundary="rel-b"; type="text/html"
+
+--rel-b
+Content-Type: text/html; charset=utf-8
+
+<html><body>
+<p>Logo should appear below (red square):</p>
+<img src="cid:Logo%40acme.example" width="50" height="50" alt="logo">
+</body></html>
+--rel-b
+Content-Type: image/png
+Content-Transfer-Encoding: base64
+Content-ID: <Logo@Acme.Example>
+Content-Disposition: inline; filename="logo.png"
+
+iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAIAAACRXR/mAAAAP0lEQVR42u3PMQ0AAAgDsOHf9Cwh
+HCQt0LWTZBcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPAxAaJPAAGX8h3AAAAAAElF
+TkSuQmCC
+--rel-b--

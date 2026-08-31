@@ -1,0 +1,41 @@
+From: Forwarder <fwd@corp.example>
+To: todd@corp.example
+Subject: Fwd: Fwd: original request
+Date: Tue, 11 Aug 2026 13:10:00 +0000
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="out-b"
+
+--out-b
+Content-Type: text/plain; charset=utf-8
+
+See the forwarded chain attached.
+
+--out-b
+Content-Type: message/rfc822
+Content-Disposition: attachment; filename="level1.eml"
+
+From: Middle <middle@corp.example>
+To: fwd@corp.example
+Subject: Fwd: original request
+Date: Mon, 10 Aug 2026 09:00:00 +0000
+Content-Type: multipart/mixed; boundary="in-b"
+
+--in-b
+Content-Type: text/plain; charset=utf-8
+
+Passing this along.
+
+--in-b
+Content-Type: message/rfc822
+Content-Disposition: attachment; filename="level2.eml"
+
+From: Origin <origin@corp.example>
+To: middle@corp.example
+Subject: original request
+Date: Sun, 09 Aug 2026 08:00:00 +0000
+Content-Type: text/plain; charset=utf-8
+
+This is the innermost message. It must not be merged into the parent body.
+
+--in-b--
+--out-b--

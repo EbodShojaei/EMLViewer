@@ -1,0 +1,12 @@
+From: Sender <sender@corp.example>
+To: todd@corp.example
+Subject: Encrypted message
+Date: Tue, 11 Aug 2026 14:10:00 +0000
+MIME-Version: 1.0
+Content-Type: application/pkcs7-mime; smime-type=enveloped-data; name="smime.p7m"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7m"
+
+iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAIAAACRXR/mAAAAP0lEQVR42u3PMQ0AAAgDsOHf9Cwh
+HCQt0LWTZBcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPAxAaJPAAGX8h3AAAAAAElF
+TkSuQmCC

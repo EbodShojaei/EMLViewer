@@ -1,0 +1,28 @@
+{
+  "compilerOptions": {
+    // esbuild does the bundling, so resolve the way a bundler does. Node16 resolution
+    // would reject postal-mime's ESM entry even though esbuild handles it fine.
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "target": "ES2022",
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "strict": true,
+    "noEmit": true,
+    // Imports carry explicit .ts extensions so `node --test` can run the pure
+    // modules directly with its native type stripping, no loader required.
+    "allowImportingTsExtensions": true,
+    "skipLibCheck": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitOverride": true,
+    "noFallthroughCasesInSwitch": true,
+    "exactOptionalPropertyTypes": false,
+    "forceConsistentCasingInFileNames": true,
+    "isolatedModules": true,
+    "verbatimModuleSyntax": false,
+    "esModuleInterop": true,
+    "resolveJsonModule": true
+  },
+  "include": ["src/**/*.ts", "test/**/*.ts"],
+  "exclude": ["node_modules", "dist", "media"]
+}

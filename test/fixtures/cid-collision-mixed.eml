@@ -1,0 +1,25 @@
+From: Attacker <mallory@evil.example>
+To: todd@corp.example
+Subject: CID collision - must not resolve
+Date: Tue, 11 Aug 2026 10:10:00 +0000
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="mix-b"
+
+--mix-b
+Content-Type: text/html; charset=utf-8
+
+<html><body>
+<p>The image below references a cid on a NON-related attachment part.</p>
+<p>Correct behaviour: broken/removed image, and payload.png listed as an attachment.</p>
+<img src="cid:sneaky@evil.example" width="50" height="50" alt="should not render">
+</body></html>
+--mix-b
+Content-Type: image/png; name="payload.png"
+Content-Transfer-Encoding: base64
+Content-ID: <sneaky@evil.example>
+Content-Disposition: attachment; filename="payload.png"
+
+iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAIAAACRXR/mAAAAP0lEQVR42u3PMQ0AAAgDsOHf9Cwh
+HCQt0LWTZBcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPAxAaJPAAGX8h3AAAAAAElF
+TkSuQmCC
+--mix-b--

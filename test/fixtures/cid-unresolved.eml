@@ -1,0 +1,9 @@
+From: Broken <broken@example.com>
+To: todd@corp.example
+Subject: Dangling cid reference
+Date: Tue, 11 Aug 2026 10:15:00 +0000
+Content-Type: text/html; charset=utf-8
+
+<html><body><p>Below is a cid: that points at nothing:</p>
+<img src="cid:does-not-exist@nowhere" width="40" height="40" alt="missing">
+<p>End.</p></body></html>

@@ -1,0 +1,18 @@
+From: Jane Doe <jane@acme.example>
+To: ops@corp.example
+Subject: Quarterly numbers
+Date: Tue, 11 Aug 2026 14:31:00 -0700
+Message-ID: <basic-1@acme.example>
+Content-Type: text/plain; charset=utf-8
+
+Hi team,
+
+The Q3 numbers are in. Revenue is up 12% and churn is flat.
+
+Full breakdown at https://example.com/reports/q3 (internal only).
+
+Thanks,
+Jane
+-- 
+Jane Doe | Acme Corp
+jane@acme.example

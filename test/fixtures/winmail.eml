@@ -1,0 +1,21 @@
+From: Outlook User <ol@corp.example>
+To: todd@corp.example
+Subject: TNEF encoded message
+Date: Tue, 11 Aug 2026 14:20:00 +0000
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="tnef-b"
+
+--tnef-b
+Content-Type: text/plain; charset=utf-8
+
+The real content is inside winmail.dat.
+
+--tnef-b
+Content-Type: application/ms-tnef; name="winmail.dat"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="winmail.dat"
+
+iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAIAAACRXR/mAAAAP0lEQVR42u3PMQ0AAAgDsOHf9Cwh
+HCQt0LWTZBcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPAxAaJPAAGX8h3AAAAAAElF
+TkSuQmCC
+--tnef-b--

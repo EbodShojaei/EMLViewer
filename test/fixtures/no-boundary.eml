@@ -1,0 +1,12 @@
+From: Broken <broken@example.com>
+To: todd@corp.example
+Subject: multipart with no boundary parameter
+Date: Tue, 11 Aug 2026 13:00:00 +0000
+MIME-Version: 1.0
+Content-Type: multipart/mixed
+
+--something
+Content-Type: text/plain
+
+This body is unreachable because the Content-Type declares no boundary.
+--something--

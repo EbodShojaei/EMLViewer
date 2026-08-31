@@ -1,0 +1,104 @@
+name: Release
+
+on:
+  push:
+    tags: ['v*.*.*']
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Build and verify only — do not publish'
+        type: boolean
+        default: true
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+
+      - run: npm ci
+
+      - name: Type check
+        run: npm run check
+
+      - name: Test
+        run: npm test
+
+      - name: Package
+        run: npm run package
+
+      - name: Verify tag matches package.json version
+        if: startsWith(github.ref, 'refs/tags/v')
+        run: |
+          TAG="${GITHUB_REF_NAME#v}"
+          PKG=$(node -p "require('./package.json').version")
+          echo "tag=$TAG manifest=$PKG"
+          [ "$TAG" = "$PKG" ] || { echo "::error::tag v$TAG != package.json $PKG"; exit 1; }
+
+      - name: Verify vsix contents exactly
+        run: |
+          VSIX=$(ls *.vsix)
+          ACTUAL=$(unzip -Z1 "$VSIX" | grep '^extension/' | sort)
+          EXPECTED=$(printf '%s\n' \
+            extension/LICENSE.txt \
+            extension/changelog.md \
+            extension/dist/extension.js \
+            extension/icon.png \
+            extension/media/codicon.css \
+            extension/media/codicon.ttf \
+            extension/media/main.css \
+            extension/media/main.js \
+            extension/package.json \
+            extension/readme.md | sort)
+          if [ "$ACTUAL" != "$EXPECTED" ]; then
+            echo "::error::vsix contents differ from the expected set"
+            diff <(echo "$EXPECTED") <(echo "$ACTUAL") || true
+            exit 1
+          fi
+          echo "vsix contents verified exactly: $VSIX"
+
+      - name: Publish to Open VSX
+        if: startsWith(github.ref, 'refs/tags/v') && inputs.dry_run != true
+        env:
+          OVSX_PAT: ${{ secrets.OVSX_PAT }}
+        run: |
+          if [ -z "$OVSX_PAT" ]; then
+            echo "::warning::OVSX_PAT not set — skipping Open VSX"
+            exit 0
+          fi
+          npm run publish:ovsx
+
+      - name: Publish to Visual Studio Marketplace
+        if: startsWith(github.ref, 'refs/tags/v') && inputs.dry_run != true
+        env:
+          VSCE_PAT: ${{ secrets.VSCE_PAT }}
+        run: |
+          if [ -z "$VSCE_PAT" ]; then
+            echo "::warning::VSCE_PAT not set — skipping the Marketplace"
+            exit 0
+          fi
+          npm run publish:vsce
+
+      - name: Warn if nothing was published
+        if: startsWith(github.ref, 'refs/tags/v') && inputs.dry_run != true
+        env:
+          OVSX_PAT: ${{ secrets.OVSX_PAT }}
+          VSCE_PAT: ${{ secrets.VSCE_PAT }}
+        run: |
+          if [ -z "$OVSX_PAT" ] && [ -z "$VSCE_PAT" ]; then
+            echo "::warning::neither OVSX_PAT nor VSCE_PAT is set — the tag published nothing to a registry; the vsix is attached to the GitHub release only"
+          fi
+
+      - name: Attach the vsix to the GitHub release
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: '*.vsix'
+          generate_release_notes: true

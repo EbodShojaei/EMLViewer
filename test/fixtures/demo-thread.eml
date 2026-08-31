@@ -1,0 +1,31 @@
+From: Priya Raman <priya@example.com>
+To: Todd <todd@example.com>
+Cc: platform@example.com
+Subject: Re: Re: CSP change broke the preview pane
+Date: Sun, 09 Aug 2026 17:41:00 -0700
+Message-ID: <thread-3@example.com>
+Content-Type: text/plain; charset=utf-8
+
+Confirmed — adding the hash to the parent policy fixes it. Merging now.
+
+For anyone finding this later: the frame inherits the parent CSP, and the two
+policies intersect, so the inner one can only ever tighten.
+
+On Sun, Aug 9, Todd wrote:
+> Try putting the hash on the shell policy too, not just the iframe's.
+>
+> On Sun, Aug 9, Priya wrote:
+>> The shim never runs. No console error I can see, the frame just
+>> reports height 0 and collapses.
+>>
+>> On Sat, Aug 8, Marco wrote:
+>>> Which policy is actually being applied to the srcdoc document?
+>>> That's usually where this goes wrong.
+>>>
+>>> On Sat, Aug 8, Priya wrote:
+>>>> Preview pane is blank after the CSP change. Repro is in #4812.
+>>>> Bisect points at the sandbox commit.
+
+-- 
+Priya Raman
+Platform Tooling

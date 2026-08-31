@@ -1,0 +1,237 @@
+{
+  "name": "eml-view",
+  "displayName": "EMLV",
+  "description": "Read .eml email files as rendered email. Blocks tracking pixels by default.",
+  "version": "1.0.0",
+  "publisher": "eshojaei",
+  "license": "MIT",
+  "icon": "icon.png",
+  "categories": [
+    "Visualization",
+    "Other"
+  ],
+  "keywords": [
+    "eml",
+    "email",
+    "mime",
+    "rfc822",
+    "mail"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/EbodShojaei/EMLViewer.git"
+  },
+  "bugs": {
+    "url": "https://github.com/EbodShojaei/EMLViewer/issues"
+  },
+  "homepage": "https://github.com/EbodShojaei/EMLViewer#readme",
+  "qna": "marketplace",
+  "galleryBanner": {
+    "color": "#1f1f1f",
+    "theme": "dark"
+  },
+  "badges": [],
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "activationEvents": [],
+  "main": "./dist/extension.js",
+  "capabilities": {
+    "untrustedWorkspaces": {
+      "supported": "limited",
+      "description": "Remote image loading is forced to its safe default in untrusted workspaces.",
+      "restrictedConfigurations": [
+        "emlView.images.remotePolicy"
+      ]
+    },
+    "virtualWorkspaces": true
+  },
+  "contributes": {
+    "customEditors": [
+      {
+        "viewType": "emlView.preview",
+        "displayName": "Email Preview",
+        "selector": [
+          {
+            "filenamePattern": "*.eml"
+          }
+        ],
+        "priority": "default"
+      }
+    ],
+    "commands": [
+      {
+        "command": "emlView.loadRemoteImages",
+        "title": "Load Remote Images",
+        "category": "Email",
+        "icon": "$(eye)"
+      },
+      {
+        "command": "emlView.showHtml",
+        "title": "Show HTML Body",
+        "category": "Email",
+        "icon": "$(browser)"
+      },
+      {
+        "command": "emlView.showPlainText",
+        "title": "Show Plain Text Body",
+        "category": "Email",
+        "icon": "$(symbol-text)"
+      },
+      {
+        "command": "emlView.reopenAsText",
+        "title": "Reopen in Text Editor",
+        "category": "Email",
+        "icon": "$(file-code)"
+      },
+      {
+        "command": "emlView.openWithPreview",
+        "title": "Open with Email Preview",
+        "category": "Email"
+      }
+    ],
+    "menus": {
+      "editor/title": [
+        {
+          "command": "emlView.loadRemoteImages",
+          "when": "activeCustomEditorId == emlView.preview && emlView.hasBlockedImages",
+          "group": "navigation@1"
+        },
+        {
+          "command": "emlView.showPlainText",
+          "when": "activeCustomEditorId == emlView.preview && emlView.canToggleBody && emlView.bodyMode == html",
+          "group": "navigation@2"
+        },
+        {
+          "command": "emlView.showHtml",
+          "when": "activeCustomEditorId == emlView.preview && emlView.canToggleBody && emlView.bodyMode == text",
+          "group": "navigation@2"
+        },
+        {
+          "command": "emlView.reopenAsText",
+          "when": "activeCustomEditorId == emlView.preview",
+          "group": "navigation@9"
+        }
+      ],
+      "explorer/context": [
+        {
+          "command": "emlView.openWithPreview",
+          "when": "resourceExtname == .eml",
+          "group": "navigation@30"
+        }
+      ],
+      "commandPalette": [
+        {
+          "command": "emlView.loadRemoteImages",
+          "when": "activeCustomEditorId == emlView.preview"
+        },
+        {
+          "command": "emlView.showHtml",
+          "when": "activeCustomEditorId == emlView.preview"
+        },
+        {
+          "command": "emlView.showPlainText",
+          "when": "activeCustomEditorId == emlView.preview"
+        },
+        {
+          "command": "emlView.reopenAsText",
+          "when": "activeCustomEditorId == emlView.preview"
+        },
+        {
+          "command": "emlView.openWithPreview",
+          "when": "false"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "EMLV",
+      "properties": {
+        "emlView.images.remotePolicy": {
+          "type": "string",
+          "enum": [
+            "block",
+            "allow"
+          ],
+          "default": "block",
+          "enumDescriptions": [
+            "Block all remote images. Tracking pixels cannot report that you opened the message.",
+            "Load remote images automatically. This tells senders you opened the message."
+          ],
+          "markdownDescription": "Remote image loading policy. `block` is enforced by Content Security Policy, not just by rewriting URLs.",
+          "scope": "machine-overridable"
+        },
+        "emlView.images.maxInlineTotalMB": {
+          "type": "number",
+          "default": 16,
+          "minimum": 0,
+          "maximum": 128,
+          "description": "Total budget for embedded (cid:) images rendered in the body. Images beyond this show a placeholder and remain available as attachments."
+        },
+        "emlView.body.defaultView": {
+          "type": "string",
+          "enum": [
+            "html",
+            "text"
+          ],
+          "default": "html",
+          "enumDescriptions": [
+            "Prefer the HTML part when the message has one.",
+            "Always prefer the plain-text part; fall back to HTML only when there is none."
+          ],
+          "description": "Which body part to show first."
+        },
+        "emlView.body.collapseQuotedText": {
+          "type": "boolean",
+          "default": true,
+          "description": "Collapse trailing quoted reply history in plain-text messages behind a 'Show quoted text' toggle."
+        },
+        "emlView.body.formatFlowed": {
+          "type": "string",
+          "enum": [
+            "auto",
+            "on",
+            "off"
+          ],
+          "default": "auto",
+          "description": "Unfold RFC 3676 format=flowed plain text. 'auto' uses the Content-Type header when available, otherwise a heuristic."
+        },
+        "emlView.reloadOnChange": {
+          "type": "boolean",
+          "default": true,
+          "description": "Re-render automatically when the .eml file changes on disk."
+        },
+        "emlView.maxFileSizeMB": {
+          "type": "number",
+          "default": 25,
+          "minimum": 1,
+          "maximum": 512,
+          "description": "Files larger than this are not parsed automatically."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "build": "node esbuild.mjs",
+    "watch": "node esbuild.mjs --watch",
+    "check": "tsc --noEmit",
+    "test": "node --test test/unit/*.test.ts",
+    "vscode:prepublish": "npm run check && node esbuild.mjs --production",
+    "package": "vsce package --no-dependencies",
+    "publish:vsce": "vsce publish --no-dependencies --packagePath eml-view-$npm_package_version.vsix",
+    "publish:ovsx": "ovsx publish eml-view-$npm_package_version.vsix",
+    "release": "npm run package && npm run publish:vsce && npm run publish:ovsx"
+  },
+  "dependencies": {
+    "@vscode/codicons": "^0.0.46-24",
+    "dompurify": "^3.4.13",
+    "postal-mime": "3.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^26.2.0",
+    "@types/vscode": "1.85.0",
+    "@vscode/vsce": "^3.9.2",
+    "esbuild": "^0.28.2",
+    "ovsx": "^0.10.6",
+    "typescript": "^5.9.3"
+  }
+}

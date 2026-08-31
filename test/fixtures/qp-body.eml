@@ -1,0 +1,10 @@
+From: Billing <billing@example.fr>
+To: todd@corp.example
+Subject: =?UTF-8?Q?R=C3=A9sum=C3=A9?=
+Date: Sat, 08 Aug 2026 12:00:00 +0200
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+Prix: 12,50 =E2=82=AC
+R=C3=A9sum=C3=A9 tr=C3=A8s long qui d=C3=A9passe la limite de soixante-seiz=
+e caract=C3=A8res pour forcer un saut.

@@ -1,0 +1,683 @@
+/*
+ * EML Viewer webview styles.
+ *
+ * Every colour is derived from a --vscode-* variable so the chrome tracks the user's
+ * theme. The email body iframe deliberately gets NONE of these — it renders on its own
+ * white page (see frameShim.ts), which is why the surrounding canvas is tinted: a white
+ * document floating on a canvas is the visual grammar of a PDF viewer, and it makes
+ * forced-white inside a dark theme read as intentional rather than broken.
+ */
+
+:root {
+  --eml-fg: var(--vscode-foreground);
+  --eml-fg-strong: var(--vscode-editor-foreground, var(--vscode-foreground));
+  --eml-fg-muted: var(--vscode-descriptionForeground, rgba(127, 127, 127, 0.95));
+  --eml-bg: var(--vscode-editor-background);
+  --eml-surface: color-mix(in srgb, var(--vscode-editor-background) 94%, var(--vscode-foreground) 6%);
+  --eml-surface-hover: color-mix(in srgb, var(--vscode-editor-background) 88%, var(--vscode-foreground) 12%);
+  --eml-canvas: color-mix(in srgb, var(--vscode-editor-background) 93%, var(--vscode-foreground) 7%);
+  --eml-border: var(--vscode-panel-border, rgba(127, 127, 127, 0.3));
+  --eml-link: var(--vscode-textLink-foreground);
+  --eml-link-hover: var(--vscode-textLink-activeForeground, var(--vscode-textLink-foreground));
+  --eml-focus: var(--vscode-focusBorder);
+  --eml-badge-bg: var(--vscode-badge-background);
+  --eml-badge-fg: var(--vscode-badge-foreground);
+  --eml-btn-bg: var(--vscode-button-background);
+  --eml-btn-fg: var(--vscode-button-foreground);
+  --eml-btn-hover: var(--vscode-button-hoverBackground, var(--vscode-button-background));
+  --eml-warn: var(--vscode-editorWarning-foreground, #cca700);
+  --eml-error: var(--vscode-editorError-foreground, #f14c4c);
+  --eml-info: var(--vscode-editorInfo-foreground, var(--vscode-textLink-foreground));
+  --eml-hc-border: var(--vscode-contrastBorder, transparent);
+
+  --eml-font: var(--vscode-font-family);
+  --eml-mono: var(--vscode-editor-font-family, ui-monospace, monospace);
+  --eml-fs: var(--vscode-font-size, 13px);
+
+  --eml-1: 4px;
+  --eml-2: 8px;
+  --eml-3: 12px;
+  --eml-4: 16px;
+  --eml-5: 24px;
+
+  --eml-radius: 4px;
+  --eml-page-max: 900px;
+  --eml-measure: 84ch;
+}
+
+/* color-mix is widely available in the Electron builds this targets, but the fallback is
+   eight lines and removes a whole class of "renders as transparent" bug. */
+@supports not (color: color-mix(in srgb, red, blue)) {
+  :root {
+    --eml-surface: rgba(127, 127, 127, 0.07);
+    --eml-surface-hover: rgba(127, 127, 127, 0.14);
+    --eml-canvas: rgba(127, 127, 127, 0.08);
+  }
+}
+
+body.vscode-high-contrast,
+body.vscode-high-contrast-light {
+  --eml-surface: transparent;
+  --eml-surface-hover: transparent;
+  --eml-canvas: var(--vscode-editor-background);
+  --eml-border: var(--vscode-contrastBorder, var(--vscode-foreground));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.001ms !important;
+    animation-duration: 0.001ms !important;
+  }
+}
+body.vscode-reduce-motion *,
+body.vscode-reduce-motion *::before,
+body.vscode-reduce-motion *::after {
+  transition-duration: 0.001ms !important;
+  animation-duration: 0.001ms !important;
+}
+
+/* ------------------------------------------------------------------ layout */
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+body {
+  font-family: var(--eml-font);
+  font-size: var(--eml-fs);
+  color: var(--eml-fg);
+  background: var(--eml-bg);
+}
+
+.eml-root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+}
+
+.eml-chrome {
+  flex: 0 0 auto;
+}
+
+.eml-body {
+  flex: 1 1 auto;
+  display: flex;
+}
+
+/* HTML mail: a white page floating on a tinted canvas — the visual grammar of a PDF
+   viewer, which is what makes a white document inside a dark theme read as deliberate. */
+.eml-body--html {
+  justify-content: center;
+  padding: var(--eml-3) var(--eml-4) var(--eml-5);
+  background: var(--eml-canvas);
+}
+
+/* Plain text: no page, so no canvas. Left-aligned on the editor background, sharing the
+   header's horizontal padding so the two line up instead of stepping in and out. */
+.eml-body--text {
+  justify-content: flex-start;
+  padding: 0 var(--eml-4) var(--eml-5);
+  background: var(--eml-bg);
+}
+
+.eml-page {
+  flex: 1 1 auto;
+  min-width: 0;
+  max-width: var(--eml-page-max);
+  border: 1px solid var(--eml-border);
+  border-radius: var(--eml-radius);
+  background: #fff;
+  overflow: hidden;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.18);
+}
+body.vscode-high-contrast .eml-page {
+  box-shadow: none;
+}
+.eml-page:focus-within {
+  border-color: var(--eml-focus);
+}
+
+.eml-frame {
+  display: block;
+  width: 100%;
+  min-height: 120px;
+  border: 0;
+  background: #fff;
+  color-scheme: light;
+}
+/* Used only when the shim never reported a height, so the body still reads. */
+.eml-frame--fallback {
+  height: 70vh;
+  overflow: auto;
+}
+
+.eml-vh {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.eml-skip {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  z-index: 10;
+  padding: var(--eml-2) var(--eml-3);
+  background: var(--eml-btn-bg);
+  color: var(--eml-btn-fg);
+}
+.eml-skip:focus {
+  left: var(--eml-2);
+  top: var(--eml-2);
+}
+
+:focus-visible {
+  outline: 1px solid var(--eml-focus);
+  outline-offset: 1px;
+}
+
+/* ------------------------------------------------------------------ header */
+
+.eml-head {
+  padding: var(--eml-4) var(--eml-4) var(--eml-3);
+}
+
+.eml-subject {
+  margin: 0 0 var(--eml-3);
+  font-size: 1.35em;
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--eml-fg-strong);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.eml-subject--empty {
+  font-weight: 400;
+  font-style: italic;
+  color: var(--eml-fg-muted);
+}
+
+.eml-identity {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  column-gap: var(--eml-3);
+  align-items: start;
+}
+
+.eml-avatar {
+  width: 30px;
+  height: 30px;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  font-size: 0.72em;
+  font-weight: 600;
+  background: hsl(var(--h, 210) 45% 42%);
+  color: #fff;
+  user-select: none;
+}
+body.vscode-light .eml-avatar {
+  background: hsl(var(--h, 210) 52% 46%);
+}
+body.vscode-high-contrast .eml-avatar,
+body.vscode-high-contrast-light .eml-avatar {
+  background: transparent;
+  color: var(--eml-fg);
+  border: 1px solid var(--vscode-contrastBorder);
+}
+
+.eml-idmain {
+  min-width: 0;
+}
+.eml-line1 {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: var(--eml-2);
+  line-height: 1.35;
+}
+.eml-from-name {
+  font-weight: 600;
+  color: var(--eml-fg-strong);
+}
+.eml-from-addr {
+  color: var(--eml-fg-muted);
+  font-size: 0.92em;
+  overflow-wrap: anywhere;
+}
+.eml-line2 {
+  margin-top: 2px;
+  font-size: 0.92em;
+  color: var(--eml-fg-muted);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 var(--eml-1);
+  align-items: baseline;
+}
+.eml-label {
+  opacity: 0.8;
+}
+
+.eml-badge {
+  font-size: 0.78em;
+  padding: 1px var(--eml-2);
+  border-radius: 999px;
+  background: var(--eml-badge-bg);
+  color: var(--eml-badge-fg);
+  border: 1px solid var(--eml-hc-border);
+}
+.eml-badge--warn {
+  color: var(--eml-warn);
+  background: transparent;
+  border-color: currentColor;
+}
+
+.eml-idside {
+  display: flex;
+  align-items: center;
+  gap: var(--eml-2);
+  white-space: nowrap;
+}
+.eml-date {
+  font-size: 0.92em;
+  color: var(--eml-fg-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.eml-disclose {
+  all: unset;
+  cursor: pointer;
+  width: 22px;
+  height: 22px;
+  border-radius: var(--eml-radius);
+  display: grid;
+  place-items: center;
+  color: var(--eml-fg-muted);
+  transition: background 120ms ease, transform 120ms ease;
+}
+.eml-disclose:hover {
+  background: var(--eml-surface-hover);
+  color: var(--eml-fg);
+}
+.eml-disclose[aria-expanded='true'] {
+  transform: rotate(180deg);
+}
+
+.eml-details {
+  margin-top: var(--eml-3);
+  padding: var(--eml-3);
+  background: var(--eml-surface);
+  border: 1px solid var(--eml-border);
+  border-radius: var(--eml-radius);
+}
+.eml-details[hidden] {
+  display: none;
+}
+
+.eml-kv {
+  display: flex;
+  flex-direction: column;
+  gap: var(--eml-2);
+}
+.eml-kv-row {
+  display: grid;
+  grid-template-columns: 6.5em minmax(0, 1fr) auto;
+  gap: var(--eml-1) var(--eml-3);
+  align-items: start;
+}
+.eml-kv-key {
+  color: var(--eml-fg-muted);
+  font-size: 0.92em;
+}
+.eml-kv-val {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.eml-rcpts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--eml-1);
+  max-height: 8.5em;
+  overflow-y: auto;
+}
+.eml-rcpt {
+  font-size: 0.88em;
+  padding: 1px var(--eml-2);
+  border: 1px solid var(--eml-border);
+  border-radius: 999px;
+  background: var(--eml-bg);
+  max-width: 26ch;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.eml-rcpt--group {
+  font-weight: 600;
+  background: var(--eml-surface-hover);
+}
+.eml-rcpt--more {
+  border-style: dashed;
+  color: var(--eml-fg-muted);
+}
+
+.eml-iconbtn {
+  all: unset;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border-radius: var(--eml-radius);
+  color: var(--eml-fg-muted);
+  opacity: 0.7;
+}
+.eml-iconbtn:hover,
+.eml-iconbtn:focus-visible {
+  opacity: 1;
+  background: var(--eml-surface-hover);
+  color: var(--eml-fg);
+}
+
+/* ------------------------------------------------------------- banners */
+
+.eml-banner {
+  display: flex;
+  align-items: center;
+  gap: var(--eml-3);
+  padding: var(--eml-2) var(--eml-4);
+  border-top: 1px solid var(--eml-border);
+  background: var(--eml-surface);
+  font-size: 0.92em;
+}
+.eml-banner-text {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+.eml-banner-detail {
+  color: var(--eml-fg-muted);
+}
+.eml-banner--info > .codicon {
+  color: var(--eml-info);
+}
+.eml-banner--warning {
+  border-left: 3px solid var(--eml-warn);
+}
+.eml-banner--warning > .codicon {
+  color: var(--eml-warn);
+}
+.eml-banner--error {
+  border-left: 3px solid var(--eml-error);
+}
+.eml-banner--error > .codicon {
+  color: var(--eml-error);
+}
+.eml-banner--blocked {
+  border-left: 3px solid var(--eml-warn);
+}
+.eml-banner--blocked > .codicon {
+  color: var(--eml-warn);
+}
+.eml-banner--loaded {
+  color: var(--eml-fg-muted);
+}
+
+.eml-btn {
+  all: unset;
+  cursor: pointer;
+  box-sizing: border-box;
+  padding: 3px var(--eml-3);
+  border-radius: 2px;
+  background: var(--eml-btn-bg);
+  color: var(--eml-btn-fg);
+  border: 1px solid var(--eml-hc-border);
+  font-size: 0.92em;
+  white-space: nowrap;
+}
+.eml-btn:hover {
+  background: var(--eml-btn-hover);
+}
+.eml-btn--ghost {
+  background: transparent;
+  color: var(--eml-link);
+  border-color: transparent;
+}
+.eml-btn--ghost:hover {
+  background: var(--eml-surface-hover);
+}
+
+/* --------------------------------------------------------- attachments */
+
+.eml-attachments {
+  padding: var(--eml-3) var(--eml-4);
+  border-top: 1px solid var(--eml-border);
+}
+.eml-att-meta {
+  display: flex;
+  align-items: center;
+  gap: var(--eml-2);
+  font-size: 0.92em;
+  color: var(--eml-fg-muted);
+  margin-bottom: var(--eml-2);
+}
+.eml-att-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--eml-2);
+}
+.eml-att-item {
+  display: flex;
+  align-items: stretch;
+  border: 1px solid var(--eml-border);
+  border-radius: var(--eml-radius);
+  background: var(--eml-surface);
+  overflow: hidden;
+  max-width: 20rem;
+}
+.eml-att-item:hover {
+  background: var(--eml-surface-hover);
+}
+.eml-chip {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  column-gap: var(--eml-2);
+  align-items: center;
+  padding: var(--eml-2) var(--eml-2) var(--eml-2) var(--eml-3);
+  min-width: 0;
+}
+.eml-chip-icon {
+  grid-row: 1 / 3;
+  font-size: 16px;
+  color: var(--eml-fg-muted);
+}
+.eml-chip-name {
+  font-size: 0.92em;
+  color: var(--eml-fg-strong);
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.eml-chip-size {
+  font-size: 0.82em;
+  color: var(--eml-fg-muted);
+  font-variant-numeric: tabular-nums;
+}
+.eml-chip-save {
+  all: unset;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  width: 28px;
+  border-left: 1px solid var(--eml-border);
+  color: var(--eml-fg-muted);
+  /* Never hover-only: the control stays in the tab order and stays legible. */
+  opacity: 0.65;
+  transition: opacity 120ms ease, background 120ms ease;
+}
+.eml-att-item:hover .eml-chip-save,
+.eml-chip-save:focus-visible {
+  opacity: 1;
+}
+.eml-chip-save:hover {
+  background: var(--eml-surface-hover);
+  color: var(--eml-fg);
+}
+.eml-att-inline > summary {
+  font-size: 0.88em;
+  color: var(--eml-fg-muted);
+  cursor: pointer;
+  padding: var(--eml-2) 0 var(--eml-1);
+}
+.eml-att-inline[open] .eml-att-list {
+  margin-top: var(--eml-2);
+  opacity: 0.75;
+}
+
+/* ---------------------------------------------------------- plain text */
+
+.eml-text {
+  flex: 1 1 auto;
+  max-width: var(--eml-measure);
+  /* Monospace by default: the text emails opened in an editor are patches, CI failures,
+     log digests and ASCII tables. Proportional destroys all of them. */
+  font-family: var(--eml-mono);
+  font-size: var(--vscode-editor-font-size, 13px);
+  line-height: 1.5;
+  color: var(--eml-fg-strong);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  tab-size: 4;
+}
+.eml-text .eml-t {
+  white-space: pre-wrap;
+}
+
+.eml-q {
+  margin: 0 0 0 2px;
+  padding-left: 10px;
+  border-left: 2px solid var(--eml-border);
+  color: var(--eml-fg-muted);
+}
+.eml-q1 {
+  border-left-color: var(--vscode-charts-blue, #3794ff);
+}
+.eml-q2 {
+  border-left-color: var(--vscode-charts-green, #89d185);
+}
+.eml-q3 {
+  border-left-color: var(--vscode-charts-purple, #b180d7);
+}
+.eml-q4 {
+  border-left-color: var(--vscode-charts-orange, #d18616);
+}
+
+.eml-quote-toggle > summary {
+  cursor: pointer;
+  color: var(--eml-link);
+  font-family: var(--eml-font);
+  font-size: 0.92em;
+  padding: var(--eml-2) 0;
+  white-space: normal;
+}
+.eml-quote-toggle > summary:hover {
+  color: var(--eml-link-hover);
+}
+.eml-sig {
+  margin-top: var(--eml-3);
+  opacity: 0.7;
+}
+.eml-link {
+  color: var(--eml-link);
+}
+.eml-link:hover {
+  color: var(--eml-link-hover);
+}
+
+/* -------------------------------------------------------- empty states */
+
+.eml-empty {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: var(--eml-2);
+  padding: var(--eml-5) var(--eml-4);
+  max-width: 44ch;
+  margin: 0 auto;
+  color: var(--eml-fg-muted);
+}
+.eml-empty-icon {
+  font-size: 32px;
+  opacity: 0.7;
+}
+.eml-empty-title {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--eml-fg-strong);
+}
+.eml-empty-detail {
+  margin: 0;
+  line-height: 1.5;
+}
+.eml-empty-actions {
+  display: flex;
+  gap: var(--eml-2);
+  margin-top: var(--eml-2);
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+/* ------------------------------------------------------------ narrow */
+
+@media (max-width: 700px) {
+  .eml-head {
+    padding: var(--eml-3) var(--eml-2);
+  }
+  .eml-identity {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+  .eml-idside {
+    grid-column: 2;
+    margin-top: var(--eml-1);
+  }
+  .eml-kv-row {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+  .eml-kv-key {
+    grid-column: 1 / -1;
+    margin-top: var(--eml-1);
+  }
+  .eml-body {
+    padding: var(--eml-2) var(--eml-2) var(--eml-4);
+  }
+  .eml-attachments,
+  .eml-banner {
+    padding-left: var(--eml-2);
+    padding-right: var(--eml-2);
+  }
+  .eml-att-item {
+    max-width: 100%;
+  }
+}
+@media (max-width: 480px) {
+  .eml-avatar {
+    display: none;
+  }
+}

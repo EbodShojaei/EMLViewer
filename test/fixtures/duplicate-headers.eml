@@ -1,0 +1,10 @@
+From: First <first@example.com>
+From: Second <second@example.com>
+Subject: First subject
+Subject: Second subject
+To: todd@corp.example
+Date: Tue, 11 Aug 2026 13:30:00 +0000
+Content-Type: text/plain; charset=utf-8
+
+postal-mime v3 resolves duplicated single-value headers to the FIRST occurrence,
+so this should show "First subject" from "First".

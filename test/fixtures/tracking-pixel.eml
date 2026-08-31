@@ -1,0 +1,38 @@
+From: Tracker <campaign@marketing.example>
+To: todd@corp.example
+Subject: Remote content - nothing here may load
+Date: Tue, 11 Aug 2026 11:00:00 +0000
+MIME-Version: 1.0
+Content-Type: text/html; charset=utf-8
+
+<html><head>
+<style>
+  .hero { background-image: url(http://127.0.0.1:8099/css-bg.png); height: 40px; }
+  @import url("http://127.0.0.1:8099/imported.css");
+</style>
+</head>
+<body>
+<p>1. Classic tracking pixel (1x1):</p>
+<img src="http://127.0.0.1:8099/px.gif" width="1" height="1">
+
+<p>2. A real remote image:</p>
+<img src="http://127.0.0.1:8099/banner.png" width="200" height="60">
+
+<p>3. Protocol-relative:</p>
+<img src="//127.0.0.1:8099/proto-relative.png" width="80" height="80">
+
+<p>4. srcset candidate list:</p>
+<img srcset="http://127.0.0.1:8099/1x.png 1x, http://127.0.0.1:8099/2x.png 2x" width="80">
+
+<p>5. Inline style background:</p>
+<div style="background:url('http://127.0.0.1:8099/inline-bg.png');height:40px"></div>
+
+<p>6. CSS background via class:</p>
+<div class="hero"></div>
+
+<p>7. Remote stylesheet:</p>
+<link rel="stylesheet" href="http://127.0.0.1:8099/remote.css">
+
+<p>8. Video poster:</p>
+<video poster="http://127.0.0.1:8099/poster.jpg" width="100"></video>
+</body></html>

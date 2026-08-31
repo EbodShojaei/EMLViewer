@@ -1,0 +1,19 @@
+From: "Marketing" <news@shop.example>
+To: todd@corp.example
+Subject: Your order shipped
+Date: Mon, 10 Aug 2026 09:15:00 +0000
+Content-Type: text/html; charset=utf-8
+
+<html><head><style>
+  .wrap { font-family: Georgia, serif; max-width: 600px; }
+  .btn { background:#0b57d0; color:#fff; padding:10px 18px; text-decoration:none; }
+</style></head>
+<body>
+<div class="wrap">
+  <h1>Your order shipped</h1>
+  <p>Order <strong>#10482</strong> is on its way.</p>
+  <p><a class="btn" href="https://shop.example/track/10482">Track package</a></p>
+  <table border="1" cellpadding="6"><tr><th>Item</th><th>Qty</th></tr>
+  <tr><td>Blue widget</td><td>2</td></tr></table>
+</div>
+</body></html>

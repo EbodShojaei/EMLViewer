@@ -1,0 +1,7 @@
+From: Clock <clock@example.com>
+To: todd@corp.example
+Subject: Unparseable date header
+Date: not a real date at all
+Content-Type: text/plain; charset=utf-8
+
+The date must degrade to the raw header text, not to "Invalid Date".

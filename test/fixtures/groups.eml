@@ -1,0 +1,10 @@
+From: Announce <announce@corp.example>
+To: undisclosed-recipients:;
+Cc: Engineering: alice@corp.example, bob@corp.example, carol@corp.example;
+Subject: Group address syntax
+Date: Tue, 11 Aug 2026 13:20:00 +0000
+Content-Type: text/plain; charset=utf-8
+
+The To: header uses RFC 5322 group syntax with no members.
+The Cc: header uses a named group with three members.
+Neither may render as "undefined <undefined>".

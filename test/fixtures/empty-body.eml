@@ -1,0 +1,6 @@
+From: noreply@example.com
+To: todd@corp.example
+Subject: Header only, no body
+Date: Mon, 10 Aug 2026 01:00:00 +0000
+Content-Type: text/plain; charset=utf-8
+

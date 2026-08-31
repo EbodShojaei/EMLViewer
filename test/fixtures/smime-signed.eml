@@ -1,0 +1,22 @@
+From: Signer <signer@corp.example>
+To: todd@corp.example
+Subject: Signed but not encrypted
+Date: Tue, 11 Aug 2026 14:00:00 +0000
+MIME-Version: 1.0
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256; boundary="sig-b"
+
+--sig-b
+Content-Type: text/plain; charset=utf-8
+
+This message body MUST render normally. Signed is not encrypted.
+The badge must say the signature is not verified.
+
+--sig-b
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+
+iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAIAAACRXR/mAAAAP0lEQVR42u3PMQ0AAAgDsOHf9Cwh
+HCQt0LWTZBcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPAxAaJPAAGX8h3AAAAAAElF
+TkSuQmCC
+--sig-b--
